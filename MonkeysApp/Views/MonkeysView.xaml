@@ -20,7 +20,7 @@
                 ItemsSource="{Binding Monkeys}"
                 BackgroundColor="Transparent"
                 SelectionMode="None">
-                <!--<CollectionView.EmptyView>
+                <CollectionView.EmptyView>
                     <StackLayout Padding="100">
                         <Image
                             HorizontalOptions="CenterAndExpand"
@@ -30,7 +30,7 @@
                 </CollectionView.EmptyView>
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout  Orientation="Horizontal" Span="3"/>
-                </CollectionView.ItemsLayout>-->
+                </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="model:Monkey">
                         <Grid Padding="10">

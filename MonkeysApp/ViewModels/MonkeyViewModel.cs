@@ -23,18 +23,6 @@ namespace MonkeysApp.ViewModels
             this.geolocation = geolocation;
         }
 
-        [RelayCommand]
-        async Task GoToDetails(Monkey monkey)
-        {
-            if (monkey == null)
-                return;
-
-            await Shell.Current.GoToAsync(nameof(DetailsView), true, new Dictionary<string, object>
-            {
-                {"Monkey", monkey }
-            });
-        }
-
         [ObservableProperty]
         bool isRefreshing;
 
@@ -46,15 +34,10 @@ namespace MonkeysApp.ViewModels
 
             try
             {
-                if (connectivity.NetworkAccess != NetworkAccess.Internet)
-                {
-                    await Shell.Current.DisplayAlert("No connectivity!",
-                        $"Please check internet and try again.", "OK");
-                    return;
-                }
-
                 IsBusy = true;
-                var monkeys = await monkeyService.GetMonkeys();
+                var monkeys = (connectivity.NetworkAccess == NetworkAccess.Internet)
+                    ? await monkeyService.GetOnlineMonkeys()
+                    : await monkeyService.GetOfflineMonkeys();
 
                 if (Monkeys.Count != 0)
                     Monkeys.Clear();
@@ -74,6 +57,18 @@ namespace MonkeysApp.ViewModels
                 IsRefreshing = false;
             }
 
+        }
+
+        [RelayCommand]
+        async Task GoToDetails(Monkey monkey)
+        {
+            if (monkey == null)
+                return;
+
+            await Shell.Current.GoToAsync(nameof(DetailsView), true, new Dictionary<string, object>
+            {
+                {"Monkey", monkey }
+            });
         }
 
         [RelayCommand]
